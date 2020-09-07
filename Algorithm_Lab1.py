@@ -1,6 +1,7 @@
 import fileWriteReadParser
 from datetime import datetime
 import random
+import app_gui
 
 # https://pypi.org/project/fastaparser/
 
@@ -36,6 +37,7 @@ def algo_method(genome, dnaStrain):
     gLength = len(genome)
     dLength = len(dnaStrain)
     succession = 0
+    timeComplexity = 0
     print("Genome: " + genome)
     print("DNA Strain: " + dnaStrain)
     print("Genome Length: " + str(gLength))
@@ -55,6 +57,7 @@ def algo_method(genome, dnaStrain):
             if dnaStrain[0] == genome[i]:
                 succession += 1
                 timeComplexity += 1
+                # Check all the middle letters
                 for j in range(1, dLength-1):
                     timeComplexity += 1
                     if dnaStrain[j] == genome[i + j]:
@@ -72,6 +75,7 @@ def brute_force_search(genome, dnaStrain):
     gLength = len(genome)
     dLength = len(dnaStrain)
     succession = 0
+    timeComplexity = 0
     print("Genome Length: " + str(gLength))
     print("DNA Length: " + str(dLength))
 
@@ -108,8 +112,8 @@ def run_test(genomeLength, dnaLength):
     genome = random_generate_string(genomeLength)
 
     position = []
-    position = brute_force_search(genome, dnaStrain)
-    #position = algo_method(genome, dnaStrain)
+    #position = brute_force_search(genome, dnaStrain)
+    position = algo_method(genome, dnaStrain)
     print("Position Found: ")
     for i in range(0, len(position)):
         print(str(position[i]) + " ")
@@ -119,7 +123,7 @@ def run_test(genomeLength, dnaLength):
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     # algorithm_analysis_data_schema(genome, strain, gLength, dLength, genome_file_type, time_executed, method, time_complexity, positions)
     fileWriteReadParser.write_data_json_file(
-        algorithm_analysis_data_schema(genome, dnaStrain, len(genome), len(dnaStrain), "raw", dt_string, "BruteForce",
+        algorithm_analysis_data_schema(genome, dnaStrain, len(genome), len(dnaStrain), "raw", dt_string, "Algo",
                                        timeComplexity, position))
 
     # fileWriteReadParser.write_data_json_file(
@@ -139,4 +143,5 @@ def main():
     # fileWriteReadParser.read_data_json_file()
 
 
-main()
+# main()
+app_gui.show_chart()

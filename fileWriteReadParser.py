@@ -2,7 +2,7 @@ import json
 import fastaparser
 import os.path
 
-file_name = "data3.json"
+file_name = "data2.json"
 genome_file_name = "GCF_000195955.2_ASM19595v2_genomic.fna"
 override_data = False
 
