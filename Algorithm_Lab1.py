@@ -1,99 +1,16 @@
-import fileWriteReadParser
-from datetime import datetime
 import random
 import app_gui
+import warnings
+import algorithmTest
+import fileWriteReadParser
 
-# https://pypi.org/project/fastaparser/
+warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
 
-# dna_string = fileWriteReadParser.open_genome_file()
-
-# print(dna_string)
-
-timeComplexity = 0
-
-
-def algorithm_analysis_data_schema(genome, strain, gLength, dLength, genome_file_type, time_executed, method,
-                                   time_complexity, positions):
-    data = {
-        "genome": genome,
-        "genome_length": gLength,
-        "dna_strain": strain,
-        "dna_strain_length": dLength,
-        "genome_file_type": genome_file_type,
-        "time_executed": time_executed,
-        "method": method,
-        "time_complexity": time_complexity,
-        "position found": positions
-    }
-    return data
-
-
-# algorithm_analysis_data_schema("abcd", "abc", 4, 3, "fna", 0, "Brute Force", 0, [1,2,3])
-
-
-def algo_method(genome, dnaStrain):
-    position = []
-    global timeComplexity
-    gLength = len(genome)
-    dLength = len(dnaStrain)
-    succession = 0
-    timeComplexity = 0
-    print("Genome: " + genome)
-    print("DNA Strain: " + dnaStrain)
-    print("Genome Length: " + str(gLength))
-    print("DNA Length: " + str(dLength))
-    if dLength == 0:
-        return position
-    for i in range(0, gLength):
-        succession = 0
-        timeComplexity += 1
-        if dLength + i == gLength:
-            return position
-        # Check last letter of dna_strain in genome
-        if dnaStrain[dLength - 1] == genome[i+dLength-1]:
-            succession += 1
-            timeComplexity += 1
-            # Check first letter of dna_strain in genome
-            if dnaStrain[0] == genome[i]:
-                succession += 1
-                timeComplexity += 1
-                # Check all the middle letters
-                for j in range(1, dLength-1):
-                    timeComplexity += 1
-                    if dnaStrain[j] == genome[i + j]:
-                        succession += 1
-                    else:
-                        break
-                if succession == dLength:
-                    position.append(i)
-    return position
-
-
-def brute_force_search(genome, dnaStrain):
-    position = []
-    global timeComplexity
-    gLength = len(genome)
-    dLength = len(dnaStrain)
-    succession = 0
-    timeComplexity = 0
-    print("Genome Length: " + str(gLength))
-    print("DNA Length: " + str(dLength))
-
-    for i in range(0, gLength):
-        succession = 0
-        timeComplexity += 1
-        for j in range(0, dLength):
-            timeComplexity += 1
-            if i + j < gLength:
-                if genome[i + j] == dnaStrain[j]:
-                    timeComplexity += 1
-                    succession += 1
-            else:
-                break
-        if succession == dLength:
-            timeComplexity += 1
-            position.append(i)
-    return position
+is_genome_file = True
+algorithmSelector = 0
+front_back_file = "front_back.json"
+brute_force_file = "brute_force.json"
 
 
 def random_generate_string(length):
@@ -105,43 +22,39 @@ def random_generate_string(length):
     return randStr
 
 
-def run_test(genomeLength, dnaLength):
-    global timeComplexity
+def algorithmRun(genome, dnaStrain):
+    if algorithmSelector == 0:
+        fileWriteReadParser.file_name = brute_force_file
+        algorithmTest.brute_force_search(genome, dnaStrain)
+    elif algorithmSelector == 1:
+        fileWriteReadParser.file_name = front_back_file
+        algorithmTest.front_back_search(genome, dnaStrain)
+
+
+def run_multiple_test(genomeLength, dnaLength):
     # dnaStrain = random_generate_string(dnaLength)
-    dnaStrain = "ACG"
+    dnaStrain = "ATGC"
     genome = random_generate_string(genomeLength)
-
-    position = []
-    #position = brute_force_search(genome, dnaStrain)
-    position = algo_method(genome, dnaStrain)
-    print("Position Found: ")
-    for i in range(0, len(position)):
-        print(str(position[i]) + " ")
-
-    now = datetime.now()
-    # dd/mm/YY H:M:S
-    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-    # algorithm_analysis_data_schema(genome, strain, gLength, dLength, genome_file_type, time_executed, method, time_complexity, positions)
-    fileWriteReadParser.write_data_json_file(
-        algorithm_analysis_data_schema(genome, dnaStrain, len(genome), len(dnaStrain), "raw", dt_string, "Algo",
-                                       timeComplexity, position))
-
-    # fileWriteReadParser.write_data_json_file(
-    #    algorithm_analysis_data_schema("", "", len(genome), len(dnaStrain), "raw", dt_string, "Brute Force", timeComplexity, position))
-
-    print("Time Complexity: " + str(timeComplexity) + "\n")
-    print("Dna Strain:" + dnaStrain + "\n")
-    print("Position Size: " + str(len(position)) + "\n")
+    algorithmRun(genome, dnaStrain)
 
 
-# run_test(20, 2)
+def run_genome_test():
+    dnaStrain = "ATGC"
+    genome = fileWriteReadParser.open_genome_file()
+    algorithmTest.is_record_genome = False
+    algorithmRun(genome, dnaStrain)
 
 
 def main():
-    for i in range(1, 50):
-        run_test((i * 10), 5)
-    # fileWriteReadParser.read_data_json_file()
+    if algorithmSelector == 0:
+        fileWriteReadParser.clear_data_file(brute_force_file)
+    elif algorithmSelector == 1:
+        fileWriteReadParser.clear_data_file(front_back_file)
 
+    if is_genome_file:
+        run_genome_test()
+    else:
+        for i in range(1, 100):
+            run_multiple_test((i * 10), 5)
 
-# main()
-app_gui.show_chart()
+#main()
