@@ -1,16 +1,21 @@
 import random
-import app_gui
-import warnings
 import algorithmTest
 import fileWriteReadParser
 
-warnings.filterwarnings("ignore", message="numpy.dtype size changed")
-warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+use_genome_file = True
+# 0 - Brute Force, 1 - Front Back
+algorithm_selector = 0
+min_random_genome_length = 400000
+min_strain_length = 4
+max_strain_length = 20
 
-is_genome_file = True
-algorithmSelector = 0
-front_back_file = "front_back.json"
-brute_force_file = "brute_force.json"
+genome_run_file = ["brute_force.json", "front_back.json"]
+multi_run_file = ["BFS_rand.json", "FBS_rand.json"]
+fileWriteReadParser.genome_file_name = "GCF_000195955.2_ASM19595v2_genomic.fna"
+
+
+# WorstStrain = "CCCCCCCCCCCCCCCCCCCCCCCCC"
+# WorstGenome = "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
 
 
 def random_generate_string(length):
@@ -23,38 +28,40 @@ def random_generate_string(length):
 
 
 def algorithmRun(genome, dnaStrain):
-    if algorithmSelector == 0:
-        fileWriteReadParser.file_name = brute_force_file
+    if algorithm_selector == 0:
         algorithmTest.brute_force_search(genome, dnaStrain)
-    elif algorithmSelector == 1:
-        fileWriteReadParser.file_name = front_back_file
+    elif algorithm_selector == 1:
         algorithmTest.front_back_search(genome, dnaStrain)
 
 
 def run_multiple_test(genomeLength, dnaLength):
-    # dnaStrain = random_generate_string(dnaLength)
-    dnaStrain = "ATGC"
+    dnaStrain = random_generate_string(dnaLength)
     genome = random_generate_string(genomeLength)
+    algorithmTest.is_record_genome = False
     algorithmRun(genome, dnaStrain)
 
 
-def run_genome_test():
-    dnaStrain = "ATGC"
+def run_genome_test(dnaLength):
     genome = fileWriteReadParser.open_genome_file()
+    dnaStrain = random_generate_string(dnaLength)
     algorithmTest.is_record_genome = False
     algorithmRun(genome, dnaStrain)
 
 
 def main():
-    if algorithmSelector == 0:
-        fileWriteReadParser.clear_data_file(brute_force_file)
-    elif algorithmSelector == 1:
-        fileWriteReadParser.clear_data_file(front_back_file)
-
-    if is_genome_file:
-        run_genome_test()
+    if use_genome_file:
+        fileWriteReadParser.clear_data_file(genome_run_file[algorithm_selector])
+        fileWriteReadParser.file_name = genome_run_file[algorithm_selector]
+        for i in range(min_strain_length, max_strain_length + 1):
+            run_genome_test(i)
+            print(str(((i-4)/(max_strain_length-min_strain_length))*100) + "%")
     else:
-        for i in range(1, 100):
-            run_multiple_test((i * 10), 5)
+        fileWriteReadParser.clear_data_file(multi_run_file[algorithm_selector])
+        fileWriteReadParser.file_name = multi_run_file[algorithm_selector]
+        for i in range(min_strain_length, max_strain_length + 1):
+            run_multiple_test(min_random_genome_length, i)
+            print(str(((i-4)/(max_strain_length-min_strain_length))*100) + "%")
+    print("Test run Completed")
 
-#main()
+
+# main()

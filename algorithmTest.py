@@ -37,6 +37,7 @@ def algorithm_analysis_data_schema(genome, strain, gLength, dLength, genome_file
             "time_executed": time_executed,
             "method": method,
             "comparison": comparison,
+            "matches": len(positions),
             "position found": positions
         }
     else:
@@ -49,6 +50,7 @@ def algorithm_analysis_data_schema(genome, strain, gLength, dLength, genome_file
             "time_executed": time_executed,
             "method": method,
             "comparison": comparison,
+            "matches": len(positions),
             "position found": positions
         }
     return data
@@ -60,25 +62,27 @@ def front_back_search(genome, dnaStrain):
     position = []
     gLength = len(genome)
     dLength = len(dnaStrain)
-    succession = 0
     comparison = 0
-    print("Genome Length: " + str(gLength))
-    print("DNA Length: " + str(dLength))
+    i = 0
     if dLength == 0:
         return
-    for i in range(0, gLength):
+    while i < gLength:
         succession = 0
         comparison += 1
-        if dLength + i == gLength:
+        if dLength + i >= gLength:
             break
+        #Check if Dna strain is a letter
+        if dLength == 1 and genome[i] == dnaStrain:
+            comparison += 1
+            position.append(i)
         # Check last letter of dna_strain in genome
+        comparison += 1
         if dnaStrain[dLength - 1] == genome[i + dLength - 1]:
             succession += 1
             comparison += 1
             # Check first letter of dna_strain in genome
             if dnaStrain[0] == genome[i]:
                 succession += 1
-                comparison += 1
                 # Check all the middle letters
                 for j in range(1, dLength - 1):
                     comparison += 1
@@ -86,8 +90,16 @@ def front_back_search(genome, dnaStrain):
                         succession += 1
                     else:
                         break
+                comparison += 1
                 if succession == dLength:
                     position.append(i)
+                    i += dLength
+                else:
+                    i += 1
+            else:
+                i += 1
+        else:
+            i += 1
 
     fileWriteReadParser.write_data_json_file(
         algorithm_analysis_data_schema(genome, dnaStrain, len(genome), len(dnaStrain), "raw", get_date_time_now(),
@@ -100,9 +112,6 @@ def brute_force_search(genome, dnaStrain):
     gLength = len(genome)
     dLength = len(dnaStrain)
     comparison = 0
-    print("Genome Length: " + str(gLength))
-    print("DNA Length: " + str(dLength))
-
     for i in range(0, gLength):
         succession = 0
         comparison += 1
@@ -115,7 +124,6 @@ def brute_force_search(genome, dnaStrain):
             else:
                 break
         if succession == dLength:
-            comparison += 1
             position.append(i)
 
     fileWriteReadParser.write_data_json_file(

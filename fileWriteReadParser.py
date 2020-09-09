@@ -3,8 +3,8 @@ import fastaparser
 import os.path
 # https://pypi.org/project/fastaparser/
 
-file_name = "test.json"
-genome_file_name = "GCF_000195955.2_ASM19595v2_genomic.fna"
+file_name = ""
+genome_file_name = ""
 
 
 def read_data_json_file():
@@ -26,8 +26,7 @@ def clear_data_file(f_name):
 
 
 def write_data_json_file(records):
-    data = {}
-    data['run_history'] = []
+    data = {'run_history': []}
     # Load in existing file record
     if os.path.isfile('./' + file_name):
         with open(file_name) as json_file:
