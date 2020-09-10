@@ -2,7 +2,7 @@ import random
 import algorithmTest
 import fileWriteReadParser
 
-use_genome_file = True
+use_genome_file = False
 # 0 - Brute Force, 1 - Front Back
 algorithm_selector = 0
 min_random_genome_length = 400000
@@ -11,6 +11,7 @@ max_strain_length = 20
 
 genome_run_file = ["brute_force.json", "front_back.json"]
 multi_run_file = ["BFS_rand.json", "FBS_rand.json"]
+all_file = ["brute_force.json", "front_back.json", "BFS_rand.json", "FBS_rand.json", "data.json", "data2.json"]
 fileWriteReadParser.genome_file_name = "GCF_000195955.2_ASM19595v2_genomic.fna"
 
 
@@ -63,5 +64,5 @@ def main():
             print(str(((i-4)/(max_strain_length-min_strain_length))*100) + "%")
     print("Test run Completed")
 
-
-# main()
+def singleFileTest():
+    print("test")
