@@ -10,21 +10,6 @@ def get_date_time_now():
     return now.strftime("%d/%m/%Y %H:%M:%S")
 
 
-def string_parser(genome, query):
-    genome_parse = ""  # create list to store the parse data
-
-    for i in range(0, len(genome)):
-        count = 1
-        if i + 1 < len(genome):
-            while genome[i] == genome[i + 1]:
-                count += 1
-                i += 1
-                if i == len(genome) - 1:
-                    break
-        genome_parse += str(count) + genome[i]
-    return genome_parse
-
-
 def algorithm_analysis_data_schema(genome, strain, gLength, dLength, genome_file_type, time_executed, method,
                                    comparison, positions):
     if is_record_genome:
