@@ -132,7 +132,7 @@ def main_gui():
     # File Frame GUI - Show File and Show Charts
     file_label = tk.Label(file_frame, text="File Name")
     existing_files = file_parser.get_list_output_files()
-    for i in range(1, len(existing_files)):
+    for i in range(0, len(existing_files)):
         listbox.insert(i, existing_files[i])
 
     show_file_button = tk.Button(file_frame, text="Show File", command=lambda: show_file(text, listbox))
