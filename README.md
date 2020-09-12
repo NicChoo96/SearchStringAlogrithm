@@ -1,4 +1,7 @@
-# SearchStringAlogrithm
+# SearchStringAlogrithm <br />
+This project is only for a school lab assignment, the implementation is rather quick and dirty especially the GUI.
+<br />
+The implementation of the algorithm, genome files and output files are manually hardcoded.<br />
 <br />
 This version can only be RUN in PYCHARM<br />
 <br />
