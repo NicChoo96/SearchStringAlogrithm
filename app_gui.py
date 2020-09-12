@@ -81,7 +81,7 @@ def main_gui():
     text.config(yscrollcommand=scroll.set)
     radio_frame.pack()
 
-    listbox = tk.Listbox(file_frame, selectmode=tk.SINGLE, width=25)
+    listbox = tk.Listbox(file_frame, selectmode=tk.SINGLE, width=25, height=15)
 
     ##############################################################################################
     # Algorithm Selector Radio Button
