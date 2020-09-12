@@ -3,8 +3,6 @@ This project is only for a school lab assignment, the implementation is rather q
 <br />
 The implementation of the genome files and output files are manually hardcoded.<br />
 <br />
-This version can only be RUN in PYCHARM<br />
-<br />
 You can run ./python_src/app_gui.py as the main file<br />
 <br />
 ./python_src/fileWriteReadParser.py <br />
