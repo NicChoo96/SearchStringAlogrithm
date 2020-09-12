@@ -4,7 +4,7 @@ This version can only be RUN in PYCHARM<br />
 <br />
 You can run ./python_src/app_gui.py as the main file<br />
 <br />
-./python_src/fileWriteReadParser.py 
+./python_src/fileWriteReadParser.py <br />
 &nbsp;&nbsp;&nbsp;&nbsp;- configures the json file input and output by changing the file_name variable to another json file<br />
 <br />
 ./python_src/app_gui.py <br />
