@@ -17,36 +17,30 @@ Front Back             |  Boyer's Moore
 :-------------------------:|:-------------------------:
 ![front_back_chart](./images/front_back_chart.png) | ![boyer_moore_chart](./images/boyer_moore_chart.png)
 
-<br>
-## fileWriteReadParser.py
- <br>
+
+# Files Description
+
+## fileReadWriteParse.py
 > configures the json file input and output by changing the file_name variable to another json file
-<br>
-<br>
 ## app_gui.py
-<br>
 > Shows DNA Strain Length vs Comparison Chart
-<br>
-<br>
-## algorithm_playground.py<br />
+## algorithm_playground.py
 > Processes the Genome and Dna Strain Search, saves to a json output file
-<br>
-<br>
+
 ## algorithm files
-<br>
+
 > boyer_moore.py
-<br>
+
 > front_back.py
-<br>
+
 > brute_force.py
-<br>
-<br>
+
+
 ## output files
-<br>
+
 > ./output_files
-<br>
-<br>
+
+
 ## genome files
-<br>
+
 > ./genome_files
-<br>
